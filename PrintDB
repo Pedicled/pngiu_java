@@ -1,0 +1,47 @@
+package Test;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import java.sql.*;
+public class QueryJFrame extends JFrame{
+    private Connection conn;
+    public QueryJFrame(String driver,String url,String table) throws SQLException,ClassNotFoundException
+    {
+        super(table);
+        this.setBounds(300,240,700,320);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        Class.forName(driver);
+        this.conn = DriverManager.getConnection(url);
+        JTable jtable = query(table);
+        this.getContentPane().add(new JScrollPane(jtable));
+        this.setVisible(true);
+    }
+    public JTable query(String table) throws SQLException
+    {
+        DefaultTableModel tablemodel = new DefaultTableModel();
+        String sql = "SELECT * FROM "+table+";";
+        Statement stmt = this.conn.createStatement();
+        ResultSet rset = stmt.executeQuery(sql);
+
+        ResultSetMetaData rsmd = rset.getMetaData();
+        int count = rsmd.getColumnCount();
+        for(int j=1;j<=count;j++)
+            tablemodel.addColumn(rsmd.getColumnLabel(j));
+        Object[] columns = new Object[count];
+        while(rset.next())
+        {
+            for(int j=1;j<=columns.length;j++)
+                columns[j-1] = rset.getString(j);
+            tablemodel.addRow(columns);
+        }
+        rset.close();
+        stmt.close();
+        return new JTable(tablemodel);
+    }
+    public static void main(String[] args) throws Exception
+    {
+        String driver = "com.mysql.cj.jdbc.Driver";
+        String url = "jdbc:mysql://localhost/student?user=root&password=Pedicled123&serverTimezone=UTC";
+        new QueryJFrame(driver,url,"student.stuinfo");
+    }
+}
