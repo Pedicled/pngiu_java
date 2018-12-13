@@ -1,0 +1,23 @@
+package sqlTest;
+import java.sql.*;
+/*
+*2018/12/13
+*Database
+*/
+public class GetDBAbout {
+    public static void main(String[] args) throws Exception
+    {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        String url = "jdbc:mysql://localhost/student?user=root&password=Pedicled123&serverTimezone=UTC";
+        Connection conn = DriverManager.getConnection(url);
+        DatabaseMetaData dbmd = conn.getMetaData();
+        System.out.println("JDBC驱动程序："+dbmd.getDriverName()+","+dbmd.getDriverVersion()+"\nJDBC URL："+dbmd.getURL()+"\n数据库："+dbmd.getDatabaseProductName()
+        +"，版本："+dbmd.getDatabaseProductVersion()+"，用户名"+dbmd.getUserName());
+        conn.close();
+    }
+
+}
+
+//1."com.mysql.cj.jdbc.Driver"//new version
+//2.URL：String url = "jdbc:mysql://localhost/student?user=root&password=******&serverTimezone=UTC";//serverTimezone=UTC
+//3.open MySQl in services.msc
