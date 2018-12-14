@@ -1,0 +1,165 @@
+package RNTI;
+import java.util.Scanner;
+/*
+*2018/12/07
+*for LeetCode's practice
+*get a RomanNumber,which transform to integer;
+***IV=4;IX=9;
+***XL=40;XC=90;
+***CD=400;CM=900;
+*input limited:1-3999;
+*/
+
+public class RomanNumber {
+    private static int I = 1;
+    private static int V = 5;
+    private static int X = 10;
+    private static int L = 50;
+    private static int C = 100;
+    private static int D = 500;
+    private static int M = 1000;
+
+    private String[] number;
+    private int data;
+    public RomanNumber(String[] number)
+    {
+        this.number = number;
+        data = this.RoToInt();
+    }
+
+    public int RoToInt()
+    {
+        String first = number[0];
+        switch(first)
+        {
+            case "I":
+                {
+                    int sum = 1;
+                    while (number.length > 1)
+                    {
+                        if (number[1].equals("V"))
+                            return 4;
+                        if (number[1].equals("X"))
+                            return 9;
+                        else
+                            return number.length;
+                    }
+                    return 1;
+                }
+            case "V":
+            {
+                int sum = 5;
+                return sum+number.length-1;
+            }
+            case "X":
+            {
+                while(number.length>1) {
+                    if (number[1].equals("L"))
+                        return 40;
+                    if (number[1].equals("C"))
+                        return 100;
+                    else {
+                        int sum = 10;
+                        for (int i = 1; i < number.length; i++) {
+                            if (number[i].equals("X"))
+                                sum += 10;
+                            if (number[i].equals("V"))
+                                sum += 5;
+                            else
+                                sum += 1;
+                        }
+                        return sum-1;
+                    }
+                }
+                return 10;
+            }
+            case "L":
+            {
+                int sum = 50;
+                for(int i=1;i<number.length;i++)
+                {
+                    if(number[i].equals("L"))
+                        sum += 50;
+                    if(number[i].equals("X"))
+                        sum += 10;
+                    if(number[i].equals("V"))
+                        sum += 5;
+                    else
+                        sum += 1;
+                }
+                return sum-1;
+            }
+            case "C":
+            {
+                int sum = 100;
+                if(number[1].equals("D"))
+                    return 400;
+                if(number[1].equals("M"))
+                    return 900;
+                for(int i=1;i<number.length;i++)
+                {
+                    if(number[i].equals("C"))
+                        sum += 100;
+                    if(number[i].equals("L"))
+                        sum += 50;
+                    if(number[i].equals("X"))
+                        sum += 10;
+                    if(number[i].equals("V"))
+                        sum += 5;
+                    else sum += 1;
+                }
+                return sum-1;
+            }
+            case "D":
+            {
+                int sum = 500;
+                for(int i=1;i<number.length;i++)
+                {
+                    if(number[i].equals("C"))
+                        sum += 100;
+                    if(number[i].equals("L"))
+                        sum += 50;
+                    if(number[i].equals("X"))
+                        sum += 10;
+                    if(number[i].equals("V"))
+                        sum += 5;
+                    else sum += 1;
+                }
+                return sum-1;
+            }
+            case "M":
+            {
+                int sum = 1000;
+                for(int i=1;i<number.length;i++)
+                {
+                    if(number[i].equals("D"))
+                        sum += 500;
+                    if(number[i].equals("C"))
+                        sum += 100;
+                    if(number[i].equals("L"))
+                        sum += 50;
+                    if(number[i].equals("X"))
+                        sum += 10;
+                    if(number[i].equals("V"))
+                        sum += 5;
+                    else sum += 1;
+                }
+                return sum-1;
+            }
+        }
+        return 0;
+    }
+
+    public static void main(String[] args)
+    {
+        Scanner in = new Scanner(System.in);
+        String[] number=null;
+        while(in.hasNextLine())
+        {   number = in.nextLine().split(" ");
+            break;
+        }
+        RomanNumber rtn = new RomanNumber(number);
+        rtn.RoToInt();
+        System.out.println(rtn.data);
+    }
+}
