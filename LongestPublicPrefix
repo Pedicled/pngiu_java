@@ -1,0 +1,52 @@
+package publicPrefix;
+import java.util.Scanner;
+/*
+*2018/12/14
+* find longest public prefix in String[]
+* else return ""
+* in leetcode
+ */
+
+
+public class publicPrefix {
+
+    public String longestCommonPrefix(String[] strs)
+    {
+        String temp="";
+        if(strs.length>1)
+        {
+            for(int i=0;i<strs[0].length();i++)
+            {
+                char curr = strs[0].charAt(i);
+                for(int j=1;j<strs.length;j++)
+                {
+                    if(strs[j].length()<=i||strs[j].charAt(i)!=curr)
+                        return temp;
+                    if(strs[j].charAt(i)==curr&&j==strs.length-1)
+                        temp += curr;
+                }
+
+            }
+            return temp;
+        }
+        if(strs.length==1)
+            return strs[0];
+        return temp;
+
+    }
+
+    public static void main(String[] args)
+    {
+        String[] strs=null;
+        Scanner in = new Scanner(System.in);
+        while(in.hasNextLine())
+        {
+            strs = in.nextLine().split(",");
+            break;
+        }
+        publicPrefix pp = new publicPrefix();
+        String prefix = pp.longestCommonPrefix(strs);
+        System.out.println("公共前缀："+prefix);
+    }
+
+}
