@@ -1,0 +1,96 @@
+package PSP;
+import java.awt.Font;
+import javax.swing.*;
+import java.io.*;
+/*
+ *2018/12/15
+ * SenderCardThread && ReceiveCardThread
+ * use PipeStream
+ * example in school textbook
+ */
+public class PipedStream {
+    private PipedInputStream pins[];
+    private PipedOutputStream pouts[];
+
+    public PipedStream(int cardMax, int number) throws IOException {
+        this.pins = new PipedInputStream[number];
+        this.pouts = new PipedOutputStream[number];
+        for (int i = 0; i < number; i++) {
+            this.pins[i] = new PipedInputStream();
+            this.pouts[i] = new PipedOutputStream(pins[i]);
+        }
+        new SenderThread(this.pouts, cardMax).start();
+        String titles[] = {"北", "东", "南", "西"};
+        int x[] = {300, 550, 300, 50}, y[] = {200, 320, 440, 320};
+        for (int i = 0; i < number; i++)
+            new ReceiveCardJFrame(pins[i], titles[i], x[i], y[i]);
+    }
+
+    public static void main(String[] args) throws IOException {
+        new PipedStream(52, 4);
+    }
+}
+class SenderThread extends Thread {
+    private PipedOutputStream pouts[];
+    private int cardMax;
+    public SenderThread(PipedOutputStream pouts[], int cardMax) {
+        this.pouts = pouts;
+        this.cardMax = cardMax;
+        this.setPriority(Thread.MAX_PRIORITY);
+    }
+    public void run() {
+        DataOutputStream douts[] = new DataOutputStream[this.pouts.length];
+        for (int i = 0; i < douts.length; i++)
+            douts[i] = new DataOutputStream(this.pouts[i]);
+        try {
+            int value = 1;
+            while (value <= this.cardMax)
+                for (int i = 0;value <= this.cardMax && i < douts.length;i++)
+                   douts[i].writeInt(value++);
+                for (int i = 0; i < douts.length; i++)
+                {
+                    douts[i].close();
+                    this.pouts[i].close();
+                }
+            }
+        catch (IOException ex) { }
+    }
+}
+
+class ReceiveCardJFrame extends JFrame implements Runnable
+{
+    private PipedInputStream pin;
+    private JTextArea text;
+    public ReceiveCardJFrame(PipedInputStream pin,String title,int x,int y)
+    {
+        super(title);
+        this.setBounds(x,y,250,150);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.pin = pin;
+        this.text = new JTextArea();
+        this.getContentPane().add(this.text);
+        this.text.setLineWrap(true);
+        this.text.setEditable(false);
+        this.text.setFont(new Font("Arial",Font.PLAIN,20));
+        this.setVisible(true);
+        new Thread(this).start();
+    }
+    public void run()
+    {
+        DataInputStream din = new DataInputStream(this.pin);
+        while(true)
+        {
+            try{
+                text.append(String.format("%4d",din.readInt()));
+                Thread.sleep(100);
+            }
+            catch(IOException ex){  break;}
+            catch(InterruptedException ex){}
+        }
+        try{
+            din.close();
+            this.pin.close();
+        }
+        catch(IOException ex){}
+    }
+}
