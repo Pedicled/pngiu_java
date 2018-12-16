@@ -10,7 +10,7 @@ import java.io.*;
 * text in textbook
  */
 public class FileJudge {
-    private ArrayList<String> keyword = new ArrayList<>();
+    private ArrayList<String> keyword = new ArrayList<>();//remeber initialization.if not deal,will throw NullPOintException
     private String str;
     private String filename;
     public FileJudge(String str,String filename)
