@@ -1,0 +1,45 @@
+package MatchingBracket;
+import java.util.Scanner;
+import java.util.Stack;
+
+/*
+*2018/12/16
+* Give String including ()[]{} in System.in
+* Judge String is valid?
+* add: "" is valid
+ */
+public class MatchingBracket {
+    private Stack<Character> brackets = new Stack<>();
+
+    public boolean isValid(String s)
+    {
+        int i=0;
+        while(i<s.length())
+        {
+            if(s.charAt(i)=='(')    brackets.push('(');
+            if(s.charAt(i)=='[')    brackets.push('[');
+            if(s.charAt(i)=='{')    brackets.push('{');
+            if(s.charAt(i)==')'&&(brackets.isEmpty()||brackets.pop()!='('))
+                return false;
+            if(s.charAt(i)==']'&&(brackets.isEmpty()||brackets.pop()!='['))
+                return false;
+            if(s.charAt(i)=='}'&&(brackets.isEmpty()||brackets.pop()!='{'))
+                return false;
+            i++;
+        }
+        if(brackets.isEmpty())
+            return true;
+        else
+            return false;
+    }
+    public static void main(String[] args)
+    {
+        Scanner in = new Scanner(System.in);
+        MatchingBracket mb = new MatchingBracket();
+        while(in.hasNext())
+        {
+            String line = in.nextLine();
+            System.out.println(line+" is valid? "+mb.isValid(line));
+        }
+    }
+}
