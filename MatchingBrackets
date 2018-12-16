@@ -7,6 +7,7 @@ import java.util.Stack;
 * Give String including ()[]{} in System.in
 * Judge String is valid?
 * add: "" is valid
+* In specially,"[" is false.
  */
 public class MatchingBracket {
     private Stack<Character> brackets = new Stack<>();
