@@ -1,0 +1,61 @@
+/**
+ * 2018/12/18
+ * Two lists represent two integer
+ * Conevrsing list is Integer
+ * return a new list
+ * eg.  in:2->4->3 + 5->6->4
+ *      out:7->0->8
+ *      because 342+465=807
+ * Missing main
+ */
+public class AddTwoNumbers {
+
+    private class ListNode{
+    int val;
+    ListNode next;
+    ListNode(int x){  val = x;}
+    }
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int sum=0;
+        ListNode newList =new ListNode(0);
+        ListNode p = newList;
+        if(l1==null&&l2==null)
+            return null;
+        while(l1!=null||l2!=null)
+        {
+            if(l1!=null&&l2!=null)
+            {
+                sum = sum + l1.val+l2.val;
+                l1 = l1.next;
+                l2 = l2.next;
+                p.next = new ListNode(sum%10);
+                p = p.next;
+                sum = sum/10;
+                continue;
+            }
+            if(l1==null)
+            {
+                sum = sum%10+l2.val;
+                p.next = new ListNode(sum%10);
+                sum /= 10;
+                p = p.next;
+                l2 = l2.next;
+                continue;
+            }
+            if(l2==null)
+            {
+                sum = sum%10+l1.val;
+                p.next = new ListNode(sum%10);
+                sum /= 10;
+                p = p.next;
+                l1 = l1.next;
+                continue;
+            }
+        }
+        if(sum!=0)
+        {
+            p.next = new ListNode(sum);
+        }
+        return newList.next;
+    }
+}
