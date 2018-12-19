@@ -1,0 +1,50 @@
+package LSS;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+/**
+ * 2018/12/19
+ * input a String
+ * check length of Longest substring.
+ * eg.  in:"abcabcbb"
+ *      out:3   //abc
+ *      in:pwwkew
+ *      out:3   //wke
+ */
+public class LongestSubstring {
+
+    //overtime in leetcode?
+    public int lengthOfLongestSubstring(String s) {
+        char[] single = s.toCharArray();
+        List<Character> substring = new ArrayList<>();
+        if(s.equals(""))
+            return 0;
+        substring.add(single[0]);
+        int count = 1;
+        for(int i=1;i<s.length();i++)
+        {
+            if(substring.contains(single[i]))
+            {
+                int index = substring.indexOf(single[i]);
+                substring = substring.subList(index+1,substring.size());
+                substring.add(single[i]);
+                count = Math.max(count,substring.size());
+            }
+            else{
+                substring.add(single[i]);
+                count = Math.max(count,substring.size());
+            }
+        }
+        return count;
+    }
+
+    //correct
+    public static void main(String[] args)
+    {
+        Scanner in = new Scanner(System.in);
+        String s = in.nextLine();
+        in.close();
+        LongestSubstring lss =  new LongestSubstring();
+        System.out.println("The length of longest Substring : "+lss.lengthOfLongestSubstring(s));
+    }
+}
