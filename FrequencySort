@@ -1,0 +1,53 @@
+package FS;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+/**
+ * 2018/12/20 night —— 2018/12/21 morning
+ * According to frequency of char in String
+ * Descending Order
+ * eg. in."tree"
+ *     out."eert"||"eetr"
+ */
+public class FrequencySort {
+
+    public String frequencySort(String s)
+    {
+        if(s=="")
+            return "";
+
+
+        ArrayList<Integer> fre = new ArrayList<>();
+        for(int i=0;i<128;i++)
+        {   fre.add(0);}
+
+        for(int i=0;i<s.length();i++)
+        {
+            int index = s.charAt(i);
+            fre.set(index,fre.get(index)+1);
+        }
+        StringBuilder freSort = new StringBuilder();
+
+        for(int i=0;i<s.length();i++)
+        {
+            int max = s.charAt(i);
+            for(int j=0;j<fre.size();j++)
+                if(fre.get(j)>fre.get(max))
+                    max = j;
+            while(fre.get(max)>0)
+            {
+                freSort.append((char)(max));
+                fre.set(max,fre.get(max)-1);
+            }
+        }
+        return freSort.toString();
+    }
+    public static void main(String[] args)
+    {
+        Scanner in = new Scanner(System.in);
+        String str = in.next();
+        FrequencySort fs = new FrequencySort();
+        System.out.println("Frequency Sort : "+fs.frequencySort(str));
+    }
+}
